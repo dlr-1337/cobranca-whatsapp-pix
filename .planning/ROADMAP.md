@@ -12,7 +12,7 @@ O primeiro milestone de CobraZap deve provar que um pequeno negocio consegue sai
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundations and Tenancy** - Base do produto com auth, tenant, auditoria e isolamento de dados
+- [x] **Phase 1: Foundations and Tenancy** - Base do produto com auth, tenant, auditoria e isolamento de dados
 - [ ] **Phase 2: Wallet and Recurring Catalog** - Clientes, consentimento, planos e assinaturas
 - [ ] **Phase 3: Charge Engine and Dashboard** - Cobrancas recorrentes/avulsas e visibilidade operacional
 - [ ] **Phase 4: Pix Payments and Reconciliation** - Integracao PSP, webhook e reconciliacao confiavel
@@ -32,9 +32,9 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 3 plans
 
 Plans:
-- [ ] 01-01: Scaffold do monorepo, ambientes locais e baseline de observabilidade
-- [ ] 01-02: Schema inicial de tenant/auth e fluxos de sessao/recuperacao de senha
-- [ ] 01-03: Guardrails de multi-tenant, auditoria e quality gates da fundacao
+- [x] 01-01: Scaffold do monorepo, ambientes locais e baseline de observabilidade
+- [x] 01-02: Schema inicial de tenant/auth e fluxos de sessao/recuperacao de senha
+- [x] 01-03: Guardrails de multi-tenant, auditoria e quality gates da fundacao
 
 ### Phase 2: Wallet and Recurring Catalog
 **Goal**: Permitir que o operador monte a carteira do tenant com clientes, consentimento, planos e assinaturas recorrentes.
@@ -118,7 +118,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundations and Tenancy | 0/3 | Not started | - |
+| 1. Foundations and Tenancy | 3/3 | Complete | 2026-04-17 |
 | 2. Wallet and Recurring Catalog | 0/3 | Not started | - |
 | 3. Charge Engine and Dashboard | 0/3 | Not started | - |
 | 4. Pix Payments and Reconciliation | 0/3 | Not started | - |

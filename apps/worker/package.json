@@ -1,0 +1,22 @@
+{
+  "name": "@cobrazap/worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx watch src/main.ts",
+    "start": "node dist/main.js",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@cobrazap/config": "workspace:*",
+    "bullmq": "^5.61.0",
+    "ioredis": "^5.8.1",
+    "pino": "^10.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0"
+  }
+}

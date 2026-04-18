@@ -1,0 +1,13 @@
+{
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "rootDir": "..",
+  "roots": ["<rootDir>", "<rootDir>/../../packages"],
+  "testEnvironment": "node",
+  "testRegex": "test/.*\\.e2e-spec.ts$",
+  "moduleNameMapper": {
+    "^@cobrazap/(config|db|domain|integrations)$": "<rootDir>/../../packages/$1/src/index.ts"
+  },
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  }
+}

@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f7f3ea;
+  --background-strong: #efe6d8;
+  --surface: #fffdf8;
+  --surface-muted: #e8dfd0;
+  --foreground: #17212b;
+  --foreground-muted: #5e6974;
+  --border: #d7cebf;
+  --accent: #0f7a67;
+  --accent-strong: #0b5f51;
+  --success: #1e7a47;
+  --danger: #b43a2e;
+  --shadow-soft: 0 24px 72px rgba(23, 33, 43, 0.08);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-background-strong: var(--background-strong);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-foreground: var(--foreground);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+  --font-sans: var(--font-plex-sans);
+  --font-mono: var(--font-plex-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--background);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-plex-sans), sans-serif;
+}
+
+a,
+button,
+input,
+select {
+  transition:
+    color 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease,
+    opacity 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 22%, white);
+}
+
+.grain-panel {
+  background-image:
+    linear-gradient(140deg, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.2)),
+    radial-gradient(circle at top left, rgba(15, 122, 103, 0.12), transparent 40%);
+}
+
+.soft-panel {
+  background: color-mix(in srgb, var(--surface) 88%, white);
+  box-shadow: var(--shadow-soft);
+}
+
+.accent-ring {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--accent) 24%, transparent),
+    0 12px 28px rgba(15, 122, 103, 0.12);
+}
+
+.sticky-fade {
+  background:
+    linear-gradient(180deg, rgba(247, 243, 234, 0), rgba(247, 243, 234, 0.85) 24%, rgba(247, 243, 234, 1));
+}
+
+.status-dot {
+  position: relative;
+}
+
+.status-dot::before {
+  content: "";
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: currentColor;
+  margin-right: 0.5rem;
+}

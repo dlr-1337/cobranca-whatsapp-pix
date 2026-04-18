@@ -1,0 +1,26 @@
+{
+  "name": "@cobrazap/db",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit -p tsconfig.build.json",
+    "test": "vitest run",
+    "db:migrate": "tsx src/migrations/migrate.ts"
+  },
+  "dependencies": {
+    "@cobrazap/domain": "workspace:*",
+    "drizzle-orm": "^0.45.2",
+    "pg": "^8.20.0",
+    "pg-mem": "^3.0.14"
+  }
+}
