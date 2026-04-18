@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { type FormEvent, useEffect, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { type FormEvent, useEffect, useMemo, useState, useTransition } from "react";
 
 import {
   Banner,
@@ -21,6 +21,11 @@ interface SessionPayload {
     whatsappPhone: string;
     timezone: string;
     defaultDueDay: number;
+    whatsappTemplateChargeInitial: string;
+    whatsappTemplateReminder: string;
+    whatsappTemplatePaymentConfirmation: string;
+    reminderWindowStartHour: number;
+    reminderWindowEndHour: number;
   };
   user: {
     id: string;
@@ -35,6 +40,11 @@ interface SettingsFormState {
   whatsappPhone: string;
   timezone: string;
   defaultDueDay: string;
+  whatsappTemplateChargeInitial: string;
+  whatsappTemplateReminder: string;
+  whatsappTemplatePaymentConfirmation: string;
+  reminderWindowStartHour: string;
+  reminderWindowEndHour: string;
 }
 
 const EMPTY_FORM: SettingsFormState = {
@@ -43,7 +53,42 @@ const EMPTY_FORM: SettingsFormState = {
   whatsappPhone: "",
   timezone: "America/Sao_Paulo",
   defaultDueDay: "5",
+  whatsappTemplateChargeInitial: "",
+  whatsappTemplateReminder: "",
+  whatsappTemplatePaymentConfirmation: "",
+  reminderWindowStartHour: "9",
+  reminderWindowEndHour: "18",
 };
+
+const COMMERCIAL_WINDOW_HOURS = Array.from({ length: 24 }, (_, index) => {
+  const hour = String(index).padStart(2, "0");
+  return {
+    value: String(index),
+    label: `${hour}:00`,
+  };
+});
+
+function TextAreaField(props: {
+  id: string;
+  label: string;
+  value: string;
+  placeholder?: string;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <label className="flex flex-col gap-2" htmlFor={props.id}>
+      <span className="text-sm font-semibold text-foreground">{props.label}</span>
+      <textarea
+        id={props.id}
+        rows={5}
+        value={props.value}
+        placeholder={props.placeholder}
+        onChange={(event) => props.onChange(event.target.value)}
+        className="rounded-2xl border border-border bg-surface px-4 py-3 text-[15px] text-foreground outline-none placeholder:text-foreground-muted/80 focus:border-accent focus:accent-ring"
+      />
+    </label>
+  );
+}
 
 export function SettingsScreen() {
   const router = useRouter();
@@ -70,11 +115,9 @@ export function SettingsScreen() {
       });
 
       if (!sessionResponse.ok) {
-        if (cancelled) {
-          return;
+        if (!cancelled) {
+          setLoadState("expired");
         }
-
-        setLoadState("expired");
         return;
       }
 
@@ -84,21 +127,27 @@ export function SettingsScreen() {
       });
 
       if (!settingsResponse.ok) {
-        if (cancelled) {
-          return;
+        if (!cancelled) {
+          setLoadState("expired");
         }
-
-        setLoadState("expired");
         return;
       }
 
-      const settingsPayload = (await settingsResponse.json()) as SessionPayload["tenant"];
-      const nextState = {
+      const settingsPayload =
+        (await settingsResponse.json()) as SessionPayload["tenant"];
+      const nextState: SettingsFormState = {
         businessName: settingsPayload.businessName,
         primaryEmail: settingsPayload.primaryEmail,
         whatsappPhone: settingsPayload.whatsappPhone,
         timezone: settingsPayload.timezone,
         defaultDueDay: String(settingsPayload.defaultDueDay),
+        whatsappTemplateChargeInitial:
+          settingsPayload.whatsappTemplateChargeInitial,
+        whatsappTemplateReminder: settingsPayload.whatsappTemplateReminder,
+        whatsappTemplatePaymentConfirmation:
+          settingsPayload.whatsappTemplatePaymentConfirmation,
+        reminderWindowStartHour: String(settingsPayload.reminderWindowStartHour),
+        reminderWindowEndHour: String(settingsPayload.reminderWindowEndHour),
       };
 
       if (cancelled) {
@@ -147,6 +196,12 @@ export function SettingsScreen() {
           whatsappPhone: formState.whatsappPhone,
           timezone: formState.timezone,
           defaultDueDay: Number(formState.defaultDueDay),
+          whatsappTemplateChargeInitial: formState.whatsappTemplateChargeInitial,
+          whatsappTemplateReminder: formState.whatsappTemplateReminder,
+          whatsappTemplatePaymentConfirmation:
+            formState.whatsappTemplatePaymentConfirmation,
+          reminderWindowStartHour: Number(formState.reminderWindowStartHour),
+          reminderWindowEndHour: Number(formState.reminderWindowEndHour),
         }),
       });
 
@@ -160,17 +215,24 @@ export function SettingsScreen() {
           tone: "danger",
           text:
             (payload as { message?: string } | null)?.message ??
-            "Não foi possível concluir esta ação agora. Revise os dados e tente novamente.",
+            "Nao foi possivel concluir esta acao agora. Revise os dados e tente novamente.",
         });
         return;
       }
 
-      const savedState = {
-        businessName: (payload as SessionPayload["tenant"]).businessName,
-        primaryEmail: (payload as SessionPayload["tenant"]).primaryEmail,
-        whatsappPhone: (payload as SessionPayload["tenant"]).whatsappPhone,
-        timezone: (payload as SessionPayload["tenant"]).timezone,
-        defaultDueDay: String((payload as SessionPayload["tenant"]).defaultDueDay),
+      const savedTenant = payload as SessionPayload["tenant"];
+      const savedState: SettingsFormState = {
+        businessName: savedTenant.businessName,
+        primaryEmail: savedTenant.primaryEmail,
+        whatsappPhone: savedTenant.whatsappPhone,
+        timezone: savedTenant.timezone,
+        defaultDueDay: String(savedTenant.defaultDueDay),
+        whatsappTemplateChargeInitial: savedTenant.whatsappTemplateChargeInitial,
+        whatsappTemplateReminder: savedTenant.whatsappTemplateReminder,
+        whatsappTemplatePaymentConfirmation:
+          savedTenant.whatsappTemplatePaymentConfirmation,
+        reminderWindowStartHour: String(savedTenant.reminderWindowStartHour),
+        reminderWindowEndHour: String(savedTenant.reminderWindowEndHour),
       };
 
       setFormState(savedState);
@@ -183,13 +245,17 @@ export function SettingsScreen() {
                 ...current.tenant,
                 ...savedState,
                 defaultDueDay: Number(savedState.defaultDueDay),
+                reminderWindowStartHour: Number(
+                  savedState.reminderWindowStartHour,
+                ),
+                reminderWindowEndHour: Number(savedState.reminderWindowEndHour),
               },
             }
           : current,
       );
       setMessage({
         tone: "success",
-        text: "Configurações salvas com sucesso.",
+        text: "Configuracoes salvas com sucesso.",
       });
     });
   }
@@ -219,7 +285,7 @@ export function SettingsScreen() {
       <div className="flex min-h-screen items-center justify-center px-5 py-10">
         <div className="soft-panel w-full max-w-xl space-y-4 rounded-[2rem] border border-white/70 px-6 py-7">
           <Banner tone="danger">
-            Sua sessão expirou. Entre novamente para continuar.
+            Sua sessao expirou. Entre novamente para continuar.
           </Banner>
           <PrimaryButton className="w-full" onClick={() => router.push("/entrar")}>
             Voltar para o login
@@ -246,8 +312,20 @@ export function SettingsScreen() {
               </h1>
             </div>
             <nav className="flex flex-wrap gap-2">
+              <Link
+                href="/painel/carteira"
+                className="rounded-full border border-border bg-surface px-4 py-2 text-sm font-semibold text-foreground-muted hover:border-accent/35 hover:text-foreground"
+              >
+                Carteira
+              </Link>
+              <Link
+                href="/painel/cobrancas"
+                className="rounded-full border border-border bg-surface px-4 py-2 text-sm font-semibold text-foreground-muted hover:border-accent/35 hover:text-foreground"
+              >
+                Cobrancas
+              </Link>
               <span className="rounded-full border border-accent/20 bg-accent/10 px-4 py-2 text-sm font-semibold text-accent">
-                Configurações
+                Configuracoes
               </span>
               <Link
                 href="/painel/auditoria"
@@ -257,8 +335,8 @@ export function SettingsScreen() {
               </Link>
             </nav>
             <p className="max-w-2xl text-sm leading-6 text-foreground-muted">
-              Ajuste os dados operacionais da empresa e o vencimento padrão
-              usado nos próximos fluxos de cobrança.
+              Ajuste os dados operacionais da empresa, o vencimento padrao e os
+              templates que sustentam o envio assistido de cobrancas.
             </p>
           </div>
 
@@ -281,7 +359,7 @@ export function SettingsScreen() {
                 Dados da empresa
               </h2>
               <p className="text-sm leading-6 text-foreground-muted">
-                Esta alteração entra na trilha de auditoria.
+                Esta alteracao entra na trilha de auditoria.
               </p>
             </div>
             <div className="mt-6 grid gap-4 md:grid-cols-2">
@@ -317,16 +395,16 @@ export function SettingsScreen() {
           <section className="soft-panel rounded-[2rem] border border-white/70 px-6 py-6">
             <div className="space-y-2">
               <h2 className="text-xl font-semibold text-foreground">
-                Cobrança padrão
+                Cobranca padrao
               </h2>
               <p className="text-sm leading-6 text-foreground-muted">
-                Defina fuso e dia de vencimento para a operação inicial.
+                Defina fuso e dia de vencimento para a operacao inicial.
               </p>
             </div>
             <div className="mt-6 grid gap-4 md:grid-cols-[1.4fr_0.8fr]">
               <SelectField
                 id="timezone"
-                label="Fuso horário"
+                label="Fuso horario"
                 value={formState.timezone}
                 onChange={(event) =>
                   updateField("timezone", event.target.value)
@@ -336,7 +414,7 @@ export function SettingsScreen() {
               </SelectField>
               <SelectField
                 id="defaultDueDay"
-                label="Vencimento padrão"
+                label="Vencimento padrao"
                 value={formState.defaultDueDay}
                 onChange={(event) =>
                   updateField("defaultDueDay", event.target.value)
@@ -353,21 +431,89 @@ export function SettingsScreen() {
             </div>
           </section>
 
+          <section className="soft-panel rounded-[2rem] border border-white/70 px-6 py-6">
+            <div className="space-y-2">
+              <h2 className="text-xl font-semibold text-foreground">
+                WhatsApp assistido
+              </h2>
+              <p className="text-sm leading-6 text-foreground-muted">
+                Ajuste os templates usados no preview e mantenha reminders dentro
+                da janela comercial do tenant.
+              </p>
+            </div>
+            <div className="mt-6 grid gap-4">
+              <TextAreaField
+                id="whatsappTemplateChargeInitial"
+                label="Template de cobranca inicial"
+                value={formState.whatsappTemplateChargeInitial}
+                onChange={(value) =>
+                  updateField("whatsappTemplateChargeInitial", value)
+                }
+              />
+              <TextAreaField
+                id="whatsappTemplateReminder"
+                label="Template de reminder"
+                value={formState.whatsappTemplateReminder}
+                onChange={(value) =>
+                  updateField("whatsappTemplateReminder", value)
+                }
+              />
+              <TextAreaField
+                id="whatsappTemplatePaymentConfirmation"
+                label="Template de confirmacao de pagamento"
+                value={formState.whatsappTemplatePaymentConfirmation}
+                onChange={(value) =>
+                  updateField("whatsappTemplatePaymentConfirmation", value)
+                }
+              />
+              <div className="grid gap-4 md:grid-cols-2">
+                <SelectField
+                  id="reminderWindowStartHour"
+                  label="Inicio da janela comercial"
+                  value={formState.reminderWindowStartHour}
+                  onChange={(event) =>
+                    updateField("reminderWindowStartHour", event.target.value)
+                  }
+                >
+                  {COMMERCIAL_WINDOW_HOURS.map((hour) => (
+                    <option key={hour.value} value={hour.value}>
+                      {hour.label}
+                    </option>
+                  ))}
+                </SelectField>
+                <SelectField
+                  id="reminderWindowEndHour"
+                  label="Fim da janela comercial"
+                  value={formState.reminderWindowEndHour}
+                  onChange={(event) =>
+                    updateField("reminderWindowEndHour", event.target.value)
+                  }
+                >
+                  {COMMERCIAL_WINDOW_HOURS.map((hour) => (
+                    <option key={hour.value} value={hour.value}>
+                      {hour.label}
+                    </option>
+                  ))}
+                </SelectField>
+              </div>
+            </div>
+          </section>
+
           <div className="sticky bottom-0 z-10 pt-6">
             <div className="sticky-fade absolute inset-0 -z-10 rounded-[2rem]" />
             <div className="soft-panel flex flex-col gap-4 rounded-[1.75rem] border border-white/70 px-5 py-4 md:flex-row md:items-center md:justify-between">
               <div className="space-y-1">
                 <p className="text-sm font-semibold text-foreground">
-                  Esta alteração entra na trilha de auditoria.
+                  Esta alteracao entra na trilha de auditoria.
                 </p>
                 <p className="text-sm text-foreground-muted">
-                  A empresa permanece isolada do restante da operação.
+                  A empresa permanece isolada do restante da operacao.
                 </p>
               </div>
               <div className="flex flex-col gap-3 md:min-w-[18rem]">
                 {message ? <Banner tone={message.tone}>{message.text}</Banner> : null}
                 <PrimaryButton disabled={!isDirty || isSaving} type="submit">
-                  {isSaving ? "Salvando..." : "Salvar configurações"}
+                  {isSaving ? "Salvando..." : "Salvar configuracoes"}
                 </PrimaryButton>
               </div>
             </div>

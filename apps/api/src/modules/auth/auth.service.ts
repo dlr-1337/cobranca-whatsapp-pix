@@ -39,6 +39,11 @@ export interface AuthSessionPayload {
     whatsappPhone: string;
     timezone: string;
     defaultDueDay: number;
+    whatsappTemplateChargeInitial: string;
+    whatsappTemplateReminder: string;
+    whatsappTemplatePaymentConfirmation: string;
+    reminderWindowStartHour: number;
+    reminderWindowEndHour: number;
   };
   user: {
     id: string;
@@ -478,6 +483,12 @@ export class AuthService {
         whatsappPhone: input.settings.whatsappPhone,
         timezone: input.settings.timezone,
         defaultDueDay: input.settings.defaultDueDay,
+        whatsappTemplateChargeInitial: input.settings.whatsappTemplateChargeInitial,
+        whatsappTemplateReminder: input.settings.whatsappTemplateReminder,
+        whatsappTemplatePaymentConfirmation:
+          input.settings.whatsappTemplatePaymentConfirmation,
+        reminderWindowStartHour: input.settings.reminderWindowStartHour,
+        reminderWindowEndHour: input.settings.reminderWindowEndHour,
       },
       user: {
         id: input.userId,

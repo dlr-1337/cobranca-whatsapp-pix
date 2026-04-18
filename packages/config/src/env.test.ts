@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { loadNodeEnv, loadWorkerEnv } from "./env";
+import { loadNodeEnv, loadPaymentsEnv, loadWorkerEnv } from "./env";
 
 describe("config env loaders", () => {
   it("parses the required node env contract", () => {
@@ -24,6 +24,20 @@ describe("config env loaders", () => {
     ).toEqual({
       host: "localhost",
       port: 6380,
+    });
+  });
+
+  it("derives optional payments env with sandbox defaults", () => {
+    expect(
+      loadPaymentsEnv({
+        DATABASE_URL: "postgresql://cobrazap:cobrazap@localhost:5432/cobrazap",
+        REDIS_URL: "redis://localhost:6379",
+      }),
+    ).toEqual({
+      apiBaseUrl: "https://api-sandbox.asaas.com",
+      apiKey: null,
+      webhookToken: null,
+      userAgent: "cobrazap",
     });
   });
 });

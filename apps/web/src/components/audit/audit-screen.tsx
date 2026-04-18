@@ -32,21 +32,32 @@ interface AuditEventItem {
 }
 
 const PERIOD_OPTIONS = [
-  { value: "7d", label: "Últimos 7 dias" },
-  { value: "30d", label: "Últimos 30 dias" },
-  { value: "90d", label: "Últimos 90 dias" },
+  { value: "7d", label: "Ultimos 7 dias" },
+  { value: "30d", label: "Ultimos 30 dias" },
+  { value: "90d", label: "Ultimos 90 dias" },
 ] as const;
 
 const EVENT_OPTIONS = [
   { value: "", label: "Todos os eventos" },
   { value: "auth.signup_requested", label: "Cadastro inicial" },
   { value: "auth.email_confirmed", label: "Email confirmado" },
-  { value: "auth.login_succeeded", label: "Login concluído" },
+  { value: "auth.login_succeeded", label: "Login concluido" },
   { value: "auth.login_failed", label: "Login rejeitado" },
   { value: "auth.logout", label: "Logout" },
-  { value: "auth.password_reset_requested", label: "Pedido de redefinição" },
+  { value: "auth.password_reset_requested", label: "Pedido de redefinicao" },
   { value: "auth.password_reset_completed", label: "Senha redefinida" },
-  { value: "tenant.settings_updated", label: "Configurações atualizadas" },
+  { value: "tenant.settings_updated", label: "Configuracoes atualizadas" },
+  { value: "charge.created", label: "Cobranca criada" },
+  { value: "charge.recurring_generated", label: "Geracao recorrente" },
+  { value: "charge.marked_paid", label: "Cobranca paga" },
+  { value: "charge.canceled", label: "Cobranca cancelada" },
+  { value: "charge.replaced", label: "Cobranca substituida" },
+  { value: "payment.pix_generated", label: "Pix gerado" },
+  { value: "payment.webhook_received", label: "Webhook Pix recebido" },
+  { value: "payment.reconciliation_run", label: "Reconciliacao Pix" },
+  { value: "payment.event_replayed", label: "Replay de evento Pix" },
+  { value: "message.dispatch_opened", label: "Dispatch WhatsApp aberto" },
+  { value: "message.reminders_synced", label: "Reminder sincronizado" },
 ] as const;
 
 function formatTimestamp(value: string) {
@@ -134,7 +145,7 @@ export function AuditScreen() {
             setState("ready");
             setErrorMessage(
               payload?.message ??
-                "Não foi possível carregar a trilha de auditoria agora.",
+                "Nao foi possivel carregar a trilha de auditoria agora.",
             );
           }
         }
@@ -170,7 +181,7 @@ export function AuditScreen() {
       <div className="flex min-h-screen items-center justify-center px-5 py-10">
         <div className="soft-panel w-full max-w-xl space-y-4 rounded-[2rem] border border-white/70 px-6 py-7">
           <Banner tone="danger">
-            Sua sessão expirou. Entre novamente para continuar.
+            Sua sessao expirou. Entre novamente para continuar.
           </Banner>
           <Link
             href="/entrar"
@@ -201,10 +212,22 @@ export function AuditScreen() {
             </div>
             <nav className="flex flex-wrap gap-2">
               <Link
+                href="/painel/carteira"
+                className="rounded-full border border-border bg-surface px-4 py-2 text-sm font-semibold text-foreground-muted hover:border-accent/35 hover:text-foreground"
+              >
+                Carteira
+              </Link>
+              <Link
+                href="/painel/cobrancas"
+                className="rounded-full border border-border bg-surface px-4 py-2 text-sm font-semibold text-foreground-muted hover:border-accent/35 hover:text-foreground"
+              >
+                Cobrancas
+              </Link>
+              <Link
                 href="/painel/configuracoes"
                 className="rounded-full border border-border bg-surface px-4 py-2 text-sm font-semibold text-foreground-muted hover:border-accent/35 hover:text-foreground"
               >
-                Configurações
+                Configuracoes
               </Link>
               <span className="rounded-full border border-accent/20 bg-accent/10 px-4 py-2 text-sm font-semibold text-accent">
                 Auditoria
@@ -215,7 +238,7 @@ export function AuditScreen() {
           <div className="flex flex-wrap items-center gap-3">
             <div className="rounded-full border border-border bg-surface px-4 py-2 text-sm text-foreground-muted">
               <span className="font-semibold text-foreground">
-                {session?.user.email ?? "Responsável"}
+                {session?.user.email ?? "Responsavel"}
               </span>
             </div>
             <SecondaryButton disabled={isLoggingOut} onClick={handleLogout}>
@@ -228,7 +251,7 @@ export function AuditScreen() {
           <div className="grid gap-4 md:grid-cols-[1fr_1fr_1.3fr]">
             <SelectField
               id="period"
-              label="Período"
+              label="Periodo"
               value={period}
               onChange={(event) => setPeriod(event.target.value)}
             >
@@ -260,7 +283,7 @@ export function AuditScreen() {
           </div>
           <p className="mt-4 text-sm text-foreground-muted">
             A lista sempre mostra apenas a empresa atual. Tokens, links e dados
-            secretos ficam fora desta superfície.
+            secretos ficam fora desta superficie.
           </p>
         </section>
 
@@ -276,8 +299,8 @@ export function AuditScreen() {
               Nenhum evento encontrado
             </h2>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-foreground-muted">
-              Quando houver login, logout ou alteração sensível, os registros
-              aparecem aqui. Ajuste os filtros ou realize uma ação na empresa
+              Quando houver login, logout ou alteracao sensivel, os registros
+              aparecem aqui. Ajuste os filtros ou realize uma acao na empresa
               atual.
             </p>
           </div>

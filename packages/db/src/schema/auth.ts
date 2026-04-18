@@ -1,5 +1,10 @@
 import {
   AUTH_EMAIL_TOKEN_KINDS,
+  DEFAULT_REMINDER_WINDOW_END_HOUR,
+  DEFAULT_REMINDER_WINDOW_START_HOUR,
+  DEFAULT_WHATSAPP_TEMPLATE_CHARGE_INITIAL,
+  DEFAULT_WHATSAPP_TEMPLATE_PAYMENT_CONFIRMATION,
+  DEFAULT_WHATSAPP_TEMPLATE_REMINDER,
   MEMBERSHIP_ROLES,
   SESSION_REVOCATION_REASONS,
 } from "@cobrazap/domain";
@@ -104,6 +109,23 @@ export const tenantSettings = pgTable("tenant_settings", {
   whatsappPhone: text("whatsapp_phone").notNull(),
   timezone: text("timezone").notNull(),
   defaultDueDay: integer("default_due_day").notNull(),
+  whatsappTemplateChargeInitial: text("whatsapp_template_charge_initial")
+    .notNull()
+    .default(DEFAULT_WHATSAPP_TEMPLATE_CHARGE_INITIAL),
+  whatsappTemplateReminder: text("whatsapp_template_reminder")
+    .notNull()
+    .default(DEFAULT_WHATSAPP_TEMPLATE_REMINDER),
+  whatsappTemplatePaymentConfirmation: text(
+    "whatsapp_template_payment_confirmation",
+  )
+    .notNull()
+    .default(DEFAULT_WHATSAPP_TEMPLATE_PAYMENT_CONFIRMATION),
+  reminderWindowStartHour: integer("reminder_window_start_hour")
+    .notNull()
+    .default(DEFAULT_REMINDER_WINDOW_START_HOUR),
+  reminderWindowEndHour: integer("reminder_window_end_hour")
+    .notNull()
+    .default(DEFAULT_REMINDER_WINDOW_END_HOUR),
   createdAt: timestamp("created_at", {
     mode: "date",
     withTimezone: true,

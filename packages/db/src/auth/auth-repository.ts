@@ -184,6 +184,12 @@ export function createAuthRepository(db: AuthDatabase) {
           whatsappPhone: input.whatsappPhone,
           timezone: input.timezone,
           defaultDueDay: input.defaultDueDay,
+          whatsappTemplateChargeInitial: input.whatsappTemplateChargeInitial,
+          whatsappTemplateReminder: input.whatsappTemplateReminder,
+          whatsappTemplatePaymentConfirmation:
+            input.whatsappTemplatePaymentConfirmation,
+          reminderWindowStartHour: input.reminderWindowStartHour,
+          reminderWindowEndHour: input.reminderWindowEndHour,
           updatedAt: new Date(),
         })
         .where(eq(tenantSettings.tenantId, tenantId))
