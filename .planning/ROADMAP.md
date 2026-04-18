@@ -13,11 +13,11 @@ O primeiro milestone de CobraZap deve provar que um pequeno negocio consegue sai
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundations and Tenancy** - Base do produto com auth, tenant, auditoria e isolamento de dados
-- [ ] **Phase 2: Wallet and Recurring Catalog** - Clientes, consentimento, planos e assinaturas
-- [ ] **Phase 3: Charge Engine and Dashboard** - Cobrancas recorrentes/avulsas e visibilidade operacional
-- [ ] **Phase 4: Pix Payments and Reconciliation** - Integracao PSP, webhook e reconciliacao confiavel
-- [ ] **Phase 5: WhatsApp Assisted Dispatch and Reminders** - Preview, envio assistido e automacoes basicas
-- [ ] **Phase 6: Beta Operations and Hardening** - Exportacoes, replay seguro e readiness para beta fechado
+- [x] **Phase 2: Wallet and Recurring Catalog** - Clientes, consentimento, planos e assinaturas
+- [x] **Phase 3: Charge Engine and Dashboard** - Cobrancas recorrentes/avulsas e visibilidade operacional
+- [x] **Phase 4: Pix Payments and Reconciliation** - Integracao PSP, webhook e reconciliacao confiavel
+- [x] **Phase 5: WhatsApp Assisted Dispatch and Reminders** - Preview, envio assistido e automacoes basicas
+- [x] **Phase 6: Beta Operations and Hardening** - Exportacoes, replay seguro e readiness para beta fechado
 
 ## Phase Details
 
@@ -47,9 +47,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 02-01: Modulo de clientes, validacao de telefone e consentimento
-- [ ] 02-02: Modulo de planos, assinaturas e regras basicas de dominio recorrente
-- [ ] 02-03: Fluxos de onboarding operacional e telas de gestao da carteira
+- [x] 02-01: Modulo de clientes, validacao de telefone e consentimento
+- [x] 02-02: Modulo de planos, assinaturas e regras basicas de dominio recorrente
+- [x] 02-03: Fluxos de onboarding operacional e telas de gestao da carteira
 
 ### Phase 3: Charge Engine and Dashboard
 **Goal**: Entregar o motor interno de cobrancas com recorrencia idempotente, cobranca avulsa e visao operacional minima.
@@ -62,9 +62,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 03-01: Motor de recorrencia, competencia e garantias de idempotencia
-- [ ] 03-02: API e UI do lifecycle de cobrancas avulsas e recorrentes
-- [ ] 03-03: Dashboard operacional inicial e filtros essenciais
+- [x] 03-01: Motor de recorrencia, competencia e garantias de idempotencia
+- [x] 03-02: API e UI do lifecycle de cobrancas avulsas e recorrentes
+- [x] 03-03: Dashboard operacional inicial e filtros essenciais
 
 ### Phase 4: Pix Payments and Reconciliation
 **Goal**: Fechar o loop financeiro com um PSP inicial, suportando cobranca com vencimento, webhooks e conciliacao operacional.
@@ -77,9 +77,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 04-01: Adapter do PSP inicial e persistencia do modelo interno de Pix
-- [ ] 04-02: Ingestao de webhooks, inbox de eventos e atualizacao de status
-- [ ] 04-03: Rotinas de reconciliacao, falhas e playbook de divergencias
+- [x] 04-01: Adapter do PSP inicial e persistencia do modelo interno de Pix
+- [x] 04-02: Ingestao de webhooks, inbox de eventos e atualizacao de status
+- [x] 04-03: Rotinas de reconciliacao, falhas e playbook de divergencias
 
 ### Phase 5: WhatsApp Assisted Dispatch and Reminders
 **Goal**: Permitir cobranca assistida no WhatsApp com preview de template, historico de dispatch e lembretes basicos.
@@ -92,9 +92,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 05-01: Modelo de template, preview e montagem de mensagem
-- [ ] 05-02: Envio manual assistido, historico e eventos de dispatch
-- [ ] 05-03: Scheduler de lembretes, cancelamento por pagamento e regras por tenant
+- [x] 05-01: Modelo de template, preview e montagem de mensagem
+- [x] 05-02: Envio manual assistido, historico e eventos de dispatch
+- [x] 05-03: Scheduler de lembretes, cancelamento por pagamento e regras por tenant
 
 ### Phase 6: Beta Operations and Hardening
 **Goal**: Preparar o produto para beta fechado com filtros/exportacao, replay seguro de falhas e quality gates de operacao.
@@ -107,9 +107,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 06-01: Filtros operacionais, exportacao CSV e ajustes de dashboard
-- [ ] 06-02: Painel minimo de falhas, replay seguro e telemetria
-- [ ] 06-03: Testes criticos, documentacao operacional e readiness do beta fechado
+- [x] 06-01: Filtros operacionais, exportacao CSV e ajustes de dashboard
+- [x] 06-02: Painel minimo de falhas, replay seguro e telemetria
+- [x] 06-03: Testes criticos, documentacao operacional e readiness do beta fechado
 
 ## Progress
 
@@ -119,8 +119,8 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundations and Tenancy | 3/3 | Complete | 2026-04-17 |
-| 2. Wallet and Recurring Catalog | 0/3 | Not started | - |
-| 3. Charge Engine and Dashboard | 0/3 | Not started | - |
-| 4. Pix Payments and Reconciliation | 0/3 | Not started | - |
-| 5. WhatsApp Assisted Dispatch and Reminders | 0/3 | Not started | - |
-| 6. Beta Operations and Hardening | 0/3 | Not started | - |
+| 2. Wallet and Recurring Catalog | 3/3 | Complete | 2026-04-17 |
+| 3. Charge Engine and Dashboard | 3/3 | Complete | 2026-04-17 |
+| 4. Pix Payments and Reconciliation | 3/3 | Complete | 2026-04-17 |
+| 5. WhatsApp Assisted Dispatch and Reminders | 3/3 | Complete | 2026-04-17 |
+| 6. Beta Operations and Hardening | 3/3 | Complete | 2026-04-17 |

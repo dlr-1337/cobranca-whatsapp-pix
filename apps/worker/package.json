@@ -12,6 +12,9 @@
   },
   "dependencies": {
     "@cobrazap/config": "workspace:*",
+    "@cobrazap/db": "workspace:*",
+    "@cobrazap/domain": "workspace:*",
+    "@cobrazap/integrations": "workspace:*",
     "bullmq": "^5.61.0",
     "ioredis": "^5.8.1",
     "pino": "^10.1.0"

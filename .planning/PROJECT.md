@@ -56,11 +56,13 @@ Micro e pequenos negocios conseguem cobrar recorrencias por WhatsApp com Pix e e
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Comecar com Pix Cobranca com vencimento, nao Pix Automatico | Reduz risco regulatorio e operacional, e e compativel com o principal caso de uso do documento | - Pending |
-| Tratar envio manual assistido como fallback obrigatorio desde o inicio | Permite operar antes da maturidade completa de templates e automacoes do canal | - Pending |
-| Separar `web`, `api` e `worker` em uma arquitetura unica de produto | O dominio exige webhooks, filas, retries e reconciliacao fora do request/response do painel | - Pending |
-| Aplicar isolamento multi-tenant no modelo de dados e nos acessos desde o MVP | Vazamento cross-tenant invalida o produto para cobranca B2B | - Pending |
-| Tratar auditoria, idempotencia e reconciliacao como escopo funcional, nao hardening tardio | Cobranca, pagamento e mensageria precisam de confiabilidade operacional desde o beta | - Pending |
+| Comecar com Pix Cobranca com vencimento, nao Pix Automatico | Reduz risco regulatorio e operacional, e e compativel com o principal caso de uso do documento | Implemented in Phase 4 with Asaas-based Pix generation, webhook ingestion, and reconciliation |
+| Tratar envio manual assistido como fallback obrigatorio desde o inicio | Permite operar antes da maturidade completa de templates e automacoes do canal | Implemented in Phase 5 with `wa.me` deep links, previews, dispatch history, and reminder sync |
+| Separar `web`, `api` e `worker` em uma arquitetura unica de produto | O dominio exige webhooks, filas, retries e reconciliacao fora do request/response do painel | Implemented across phases 1-6 with same-origin BFF, Nest API, and BullMQ workers |
+| Aplicar isolamento multi-tenant no modelo de dados e nos acessos desde o MVP | Vazamento cross-tenant invalida o produto para cobranca B2B | Preserved across auth, wallet, charges, payments, messaging, and replay flows |
+| Tratar auditoria, idempotencia e reconciliacao como escopo funcional, nao hardening tardio | Cobranca, pagamento e mensageria precisam de confiabilidade operacional desde o beta | Enforced through audit events, payment inbox, reminder sync, reconciliation, and replay tooling |
+| Escolher Asaas como primeiro PSP | Entrega customer, Pix charge, QR code, and webhook primitives with lower bootstrap friction for the MVP | Implemented in Phase 4 as the provider adapter and webhook inbox model |
+| Manter cobrancas, Pix, WhatsApp e replay no mesmo dashboard operacional | Reduz troca de contexto e torna a operacao beta treinavel por um unico fluxo | Implemented in phases 4-6 inside `/painel/cobrancas` |
 
 ## Evolution
 
@@ -80,4 +82,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-17 after initialization*
+*Last updated: 2026-04-17 after phases 4-6 completion*

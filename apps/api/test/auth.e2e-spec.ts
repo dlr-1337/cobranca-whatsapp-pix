@@ -1,9 +1,11 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import request, { type SuperAgentTest } from 'supertest';
+import request from 'supertest';
 
 import { AppModule } from './../src/app.module';
 import { AuthService } from './../src/modules/auth/auth.service';
+
+type SessionAgent = ReturnType<typeof request.agent>;
 
 function extractTokenFromLink(link: string) {
   const url = new URL(link, 'http://localhost');
@@ -18,7 +20,7 @@ function extractTokenFromLink(link: string) {
 
 describe('Auth flows (e2e)', () => {
   let app: INestApplication;
-  let agent: SuperAgentTest;
+  let agent: SessionAgent;
   let authService: AuthService & {
     listOutboxMessages?: () => Array<{
       kind: string;
@@ -28,6 +30,24 @@ describe('Auth flows (e2e)', () => {
     }>;
     clearOutbox?: () => void;
   };
+
+  function requireFirstOutboxMessage(
+    messages: Array<{
+      kind: string;
+      to: string;
+      subject: string;
+      link: string;
+    }>,
+    context: string,
+  ) {
+    const message = messages[0];
+
+    if (!message) {
+      throw new Error(`expected outbox message for ${context}`);
+    }
+
+    return message;
+  }
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -66,7 +86,9 @@ describe('Auth flows (e2e)', () => {
 
     const outboxMessages = authService.listOutboxMessages?.() ?? [];
     expect(outboxMessages).toHaveLength(1);
-    expect(outboxMessages[0]).toMatchObject({
+    expect(
+      requireFirstOutboxMessage(outboxMessages, 'email confirmation'),
+    ).toMatchObject({
       kind: 'email-confirmation',
       to: 'otavio@academiacentro.com.br',
     });
@@ -81,7 +103,9 @@ describe('Auth flows (e2e)', () => {
       message: 'Email ou senha invalidos.',
     });
 
-    const confirmationToken = extractTokenFromLink(outboxMessages[0].link);
+    const confirmationToken = extractTokenFromLink(
+      requireFirstOutboxMessage(outboxMessages, 'email confirmation').link,
+    );
 
     const confirmResponse = await request(app.getHttpServer())
       .post('/auth/confirm-email')
@@ -163,7 +187,9 @@ describe('Auth flows (e2e)', () => {
       .expect(201);
 
     const signupOutbox = authService.listOutboxMessages?.() ?? [];
-    const confirmationToken = extractTokenFromLink(signupOutbox[0].link);
+    const confirmationToken = extractTokenFromLink(
+      requireFirstOutboxMessage(signupOutbox, 'signup confirmation').link,
+    );
 
     await request(app.getHttpServer())
       .post('/auth/confirm-email')
@@ -198,9 +224,13 @@ describe('Auth flows (e2e)', () => {
 
     const resetOutbox = authService.listOutboxMessages?.() ?? [];
     expect(resetOutbox).toHaveLength(1);
-    expect(resetOutbox[0].kind).toBe('password-reset');
+    expect(requireFirstOutboxMessage(resetOutbox, 'password reset').kind).toBe(
+      'password-reset',
+    );
 
-    const resetToken = extractTokenFromLink(resetOutbox[0].link);
+    const resetToken = extractTokenFromLink(
+      requireFirstOutboxMessage(resetOutbox, 'password reset').link,
+    );
 
     const resetResponse = await request(app.getHttpServer())
       .post('/auth/reset-password')
@@ -258,7 +288,10 @@ describe('Auth flows (e2e)', () => {
       .expect(201);
 
     const confirmationToken = extractTokenFromLink(
-      (authService.listOutboxMessages?.() ?? [])[0].link,
+      requireFirstOutboxMessage(
+        authService.listOutboxMessages?.() ?? [],
+        'logout flow confirmation',
+      ).link,
     );
 
     await request(app.getHttpServer())

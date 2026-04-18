@@ -1,9 +1,11 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import request, { type SuperAgentTest } from 'supertest';
+import request from 'supertest';
 
 import { AppModule } from './../src/app.module';
 import { AuthService } from './../src/modules/auth/auth.service';
+
+type SessionAgent = ReturnType<typeof request.agent>;
 
 function extractTokenFromLink(link: string) {
   const url = new URL(link, 'http://localhost');
@@ -44,7 +46,7 @@ describe('Audit flows (e2e)', () => {
     await app.close();
   });
 
-  async function signupAndLogin(agent: SuperAgentTest, input: {
+  async function signupAndLogin(agent: SessionAgent, input: {
     businessName: string;
     primaryEmail: string;
     ownerEmail: string;
@@ -62,9 +64,13 @@ describe('Audit flows (e2e)', () => {
       })
       .expect(201);
 
-    const confirmationToken = extractTokenFromLink(
-      (authService.listOutboxMessages?.() ?? [])[0].link,
-    );
+    const confirmationMessage = (authService.listOutboxMessages?.() ?? [])[0];
+
+    if (!confirmationMessage) {
+      throw new Error(`confirmation message not found for ${input.ownerEmail}`);
+    }
+
+    const confirmationToken = extractTokenFromLink(confirmationMessage.link);
 
     await request(app.getHttpServer())
       .post('/auth/confirm-email')
