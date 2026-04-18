@@ -2,10 +2,10 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: completed
-stopped_at: Phase 6 completed; roadmap, summaries, replay tooling, and beta playbook updated
-last_updated: "2026-04-17T23:59:00-03:00"
-last_activity: 2026-04-17
+status: shipped
+stopped_at: Milestone v1 shipped via PR #1 on feat/v1-core-loop-beta-ready
+last_updated: "2026-04-18T00:07:16-03:00"
+last_activity: 2026-04-18
 progress:
   total_phases: 6
   completed_phases: 6
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-17)
 
 **Core value:** Micro e pequenos negocios conseguem cobrar recorrencias por WhatsApp com Pix e enxergar com confianca quem pagou, sem retrabalho manual e sem risco de vazamento entre tenants.
-**Current focus:** Milestone wrap-up and closed-beta readiness
+**Current focus:** PR review, merge, and closed-beta operator dry run
 
 ## Current Position
 
 Phase: 6 of 6 (Beta Operations and Hardening)
 Plan: 3 of 3 in current phase
-Status: Complete
-Last activity: 2026-04-17
+Status: Shipped via PR #1
+Last activity: 2026-04-18
 
 Progress: [##########] 100%
 
@@ -74,6 +74,7 @@ Recent decisions affecting current work:
 - [Phase 6 Plan 01]: CSV export mirrors the visible filtered charge slice instead of introducing a separate reporting subsystem.
 - [Phase 6 Plan 02]: Manual PSP replay is restricted to failed inbox events and reuses the existing idempotent payment-sync flow.
 - [Phase 6 Plan 03]: Beta readiness is tracked as code, docs, tests, and synchronized planning artifacts rather than an external checklist.
+- [Ship]: Milestone v1 ships from `feat/v1-core-loop-beta-ready` through PR #1 so merge review happens against a single coherent diff.
 
 ### Pending Todos
 
@@ -83,6 +84,7 @@ None.
 
 - A real closed-beta rollout still requires production-like Asaas credentials, a public webhook base URL, and an operator dry-run against the playbook.
 - The product is ready for closed-beta validation, but not yet for broader automation beyond assisted WhatsApp transport.
+- PR #1 still needs human review and merge before the milestone is considered archived.
 
 ## Deferred Items
 
@@ -94,6 +96,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-17 23:59
-Stopped at: Phase 6 completed; awaiting user review, merge, or closed-beta execution
+Last session: 2026-04-18 00:07
+Stopped at: PR #1 opened for the completed v1 milestone; awaiting review, merge, and beta execution
 Resume file: None
